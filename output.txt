@@ -1,0 +1,19 @@
+number of checked 1 trees: 8
+number of checked 2 trees: 2
+number of checked 3 trees: 4
+number of checked 4 trees: 3
+number of checked 5 trees: 1
+number of checked 6 trees: 1
+number of checked 7 trees: 1
+
+************************
+number of closed 1 trees: 1
+number of closed 3 trees: 1
+number of closed 4 trees: 1
+number of closed 7 trees: 1
+
+************************
+number of maximal 4 trees: 1
+number of maximal 7 trees: 1
+
+Total Running Time: 0

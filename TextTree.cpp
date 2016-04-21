@@ -16,8 +16,8 @@ Decription: read in a rooted ordered tree in Zaki's format
 istream& operator>>(istream& in, TextTree& rhs)
 {
 	int total;
-	short temp;
-	stack<short> tempK;
+	int temp;
+	stack<int> tempK;
 
 	in >> rhs.tid;
 	if ( in.eof() ) return in; //the end of file, no more trees to read
@@ -34,7 +34,7 @@ istream& operator>>(istream& in, TextTree& rhs)
 
 	tempK.push(0); //the index of the root
 
-	for ( short i = 1; i < total; i++ ) {
+	for ( int i = 1; i < total; i++ ) {
 		in >> temp;
 		if ( temp == -1 ) { //a backtrack
 			tempK.pop();
@@ -47,7 +47,7 @@ istream& operator>>(istream& in, TextTree& rhs)
 			rhs.firstChild[tempK.top()] = rhs.vNumber;	
 		}
 		else { //if the current node has children already, find the rightmost child, its nextSibling is the new node
-			short j = tempK.top();
+			int j = tempK.top();
 			j = rhs.firstChild[j];
 			while ( rhs.nextSibling[j] != -1 ) j = rhs.nextSibling[j];
 			rhs.nextSibling[j] = rhs.vNumber;
@@ -64,14 +64,14 @@ istream& operator>>(istream& in, TextTree& rhs)
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
-dfsVisit(const short, const TextTree& rhs, vector<short>& zakiCode)
+dfsVisit(const int, const TextTree& rhs, vector<int>& zakiCode)
 
 Decription: a helper function for depth-first-visit
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-void dfsVisit(const short current, const TextTree& rhs, vector<short>& zakiCode)
+void dfsVisit(const int current, const TextTree& rhs, vector<int>& zakiCode)
 {
 	zakiCode.push_back(rhs.vLabel[current]);
-	short i = rhs.firstChild[current];
+	int i = rhs.firstChild[current];
 	while ( i != -1 )
 	{
 		dfsVisit(i,rhs,zakiCode);
@@ -89,10 +89,10 @@ ostream& operator<<(ostream& out, const TextTree& rhs)
 {
 	out << rhs.tid << ' ' << rhs.tid << ' ';
 
-	vector<short> zakiCode;
+	vector<int> zakiCode;
 	dfsVisit(0, rhs, zakiCode);
 	out << zakiCode.size() - 1 << ' '; //Zaki's code has one less "-1" than Luccio's
-	for ( short i = 0; i < zakiCode.size() - 1; i++ )
+	for ( int i = 0; i < zakiCode.size() - 1; i++ )
 		out << zakiCode[i] << ' ';
 	out << endl;
 	return out;

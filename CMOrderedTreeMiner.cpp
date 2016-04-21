@@ -5,10 +5,10 @@
 #include "OccList.h"
 #include "OccLongList.h"
 
-short MIN_VERTEX = 30001;
-short MAX_VERTEX = -1; //therefore, the range for valid node label is 0--30000
+int MIN_VERTEX = 30001;
+int MAX_VERTEX = -1; //therefore, the range for valid node label is 0--30000
 
-short currentVertexNumber;
+int currentVertexNumber;
 
 PatternTree currentPatternTree;
 
@@ -63,7 +63,7 @@ int main(int argc, char* argv[])
 		inFile >> tt;
 		if ( !inFile.eof() ) {
 			tt.tid = myTid++;
-			for ( short i = 0; i < tt.vNumber; i++ ) {
+			for ( int i = 0; i < tt.vNumber; i++ ) {
 				if ( tt.vLabel[i] < MIN_VERTEX ) MIN_VERTEX = tt.vLabel[i];
 				if ( tt.vLabel[i] > MAX_VERTEX ) MAX_VERTEX = tt.vLabel[i];
 			}
@@ -76,15 +76,15 @@ int main(int argc, char* argv[])
 	step2.1: scan the database once, find frequent node labels
 	******************************************************************/
 	vector<bool> isFrequent(MAX_VERTEX - MIN_VERTEX + 1, false);
-	map<short,int> count;
-	map<short,int>::iterator pos;
+	map<int,int> count;
+	map<int,int>::iterator pos;
 
 	start_time = time(0);
 
 	for ( int i = 0; i < database.size(); i++ ) {
 		vector<bool> isVisited(MAX_VERTEX - MIN_VERTEX + 1, false);
-		for ( short j = 0; j < database[i].vNumber; j++ ) {
-			short temp = database[i].vLabel[j] - MIN_VERTEX;
+		for ( int j = 0; j < database[i].vNumber; j++ ) {
+			int temp = database[i].vLabel[j] - MIN_VERTEX;
 			if ( !isVisited[temp] ) {
 				isVisited[temp] = true;
 				pos = count.find(temp);
@@ -103,11 +103,11 @@ int main(int argc, char* argv[])
 	step2.2: scan the database another time, to get occurrenceList for all 
 	frequent nodes 
 	******************************************************************/
-	map<short,OccLongList> occLongList;
-	map<short,OccLongList>::iterator pos2;
-	vector<short> dummy;
+	map<int,OccLongList> occLongList;
+	map<int,OccLongList>::iterator pos2;
+	vector<int> dummy;
 	for ( int i = 0; i < database.size(); i++ ) {
-		for ( short j = 0; j < database[i].vNumber; j++ ) {
+		for ( int j = 0; j < database[i].vNumber; j++ ) {
 			if ( isFrequent[database[i].vLabel[j] - MIN_VERTEX] == true ) {
 				occLongList[database[i].vLabel[j] - MIN_VERTEX].insert(i,dummy,j);
 			}
@@ -130,19 +130,19 @@ int main(int argc, char* argv[])
 	/******************************************************************
 	step2.4: output the results 
 	******************************************************************/
-	for ( short j = 0; j < 1000; j++ ) {
+	for ( int j = 0; j < 1000; j++ ) {
 		if ( checked[j] > 0 ) {
 			outFile << "number of checked " << j << " trees: " << checked[j] << endl;
 		}
 	}
 	outFile << endl << "************************" << endl;
-	for ( short j = 0; j < 1000; j++ ) {
+	for ( int j = 0; j < 1000; j++ ) {
 		if ( closed[j] > 0 ) {
 			outFile << "number of closed " << j << " trees: " << closed[j] << endl;
 		}
 	}
 	outFile << endl << "************************" << endl;
-	for ( short j = 0; j < 1000; j++ ) {
+	for ( int j = 0; j < 1000; j++ ) {
 		if ( maximal[j] > 0 ) {
 			outFile << "number of maximal " << j << " trees: " << maximal[j] << endl;
 		}

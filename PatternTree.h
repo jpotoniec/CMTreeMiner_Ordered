@@ -19,9 +19,9 @@ using namespace std;
 struct PatternTree : public TextTree {
 	PatternTree() : TextTree() {}
 	PatternTree(int t) : TextTree(t) {}
-	PatternTree(int t, short v) : TextTree(t,v) {}
+	PatternTree(int t, int v) : TextTree(t,v) {}
 
-	vector<short> previousSibling;
+	vector<int> previousSibling;
 
 	void initialSize () 
 	{
@@ -46,7 +46,7 @@ struct PatternTree : public TextTree {
 				vNumber--;
 			}
 			else {
-				short k = firstChild[parent[vNumber-1]];
+				int k = firstChild[parent[vNumber-1]];
 				while ( nextSibling[k] != vNumber - 1 ) k = nextSibling[k];
 				nextSibling[k] = -1;
 				vNumber--;
@@ -55,7 +55,7 @@ struct PatternTree : public TextTree {
 		return;
 	}
 
-	void addRightmost (short vertexLabel, short position)
+	void addRightmost (int vertexLabel, int position)
 	{
 		if ( vNumber == 0 ) {
 			vLabel[0] = vertexLabel;

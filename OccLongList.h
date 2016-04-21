@@ -15,7 +15,7 @@ extern PatternTree currentPatternTree;
 using namespace std;
 
 struct OccLongList { //the occurrence list for the FreqTree, i.e., Asai's algorithm
-	vector<pair<int,vector<short> > > occurrenceLong;
+	vector<pair<int,vector<int> > > occurrenceLong;
 	int lastTid;
 	int mySupport;
 
@@ -23,7 +23,7 @@ struct OccLongList { //the occurrence list for the FreqTree, i.e., Asai's algori
 	{
 	}
 
-	void insert(int newTid, vector<short>& oldLocations, short newLocation);
+	void insert(int newTid, vector<int>& oldLocations, int newLocation);
 
 	bool combineList(const OccLongList& mother, const OccList& newNodes);
 

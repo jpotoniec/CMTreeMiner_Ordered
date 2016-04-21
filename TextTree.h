@@ -18,7 +18,7 @@ struct TextTree {
 	{
 	}
 
-	TextTree(int t, short v) : tid(t), vNumber(v), 
+	TextTree(int t, int v) : tid(t), vNumber(v), 
 		vLabel(v,-1), firstChild(v,-1), nextSibling(v,-1), parent(v,-1) 
 	{
 	}
@@ -29,11 +29,11 @@ struct TextTree {
 	//assuming the copy constructor and operator= have default definition
 
 	int tid;
-	short vNumber;
-	vector<short> vLabel;
-	vector<short> firstChild;
-	vector<short> nextSibling;
-	vector<short> parent;
+	int vNumber;
+	vector<int> vLabel;
+	vector<int> firstChild;
+	vector<int> nextSibling;
+	vector<int> parent;
 };
 
 istream& operator>>(istream& in, TextTree& rhs);

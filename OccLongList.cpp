@@ -7,7 +7,7 @@ ordered pattern tree, for CMOrderedTreeMiner algorithms
 
 #include "OccLongList.h"
 
-void OccLongList::insert(int newTid, vector<short>& oldLocations, short newLocation)
+void OccLongList::insert(int newTid, vector<int>& oldLocations, int newLocation)
 {
 	occurrenceLong.push_back(make_pair(newTid,oldLocations));
 	occurrenceLong.back().second.push_back(newLocation);
@@ -80,18 +80,18 @@ void OccLongList::explore(const vector<bool>& isFrequent,
 	//cout << currentPatternTree;
 	//cout << "support of current pattern tree is: " << mySupport << endl;
 	
-	short tempV = currentPatternTree.vNumber;
+	int tempV = currentPatternTree.vNumber;
 	checked[tempV]++; //update the number of checked trees
 
 	vector<bool> rightPath(tempV,false);
-	short temp = tempV - 1;
+	int temp = tempV - 1;
 	while ( temp != -1 ) {
 		rightPath[temp] = true;
 		temp = currentPatternTree.parent[temp];
 	}
 
-	set<pair<short, short> > occurrenceMatch; //(short,short) = (position,label)
-	set<pair<short, short> >::iterator pos2;
+	set<pair<int, int> > occurrenceMatch; //(int,int) = (position,label)
+	set<pair<int, int> >::iterator pos2;
 
 	//step 1, do the occurrence match check
 	int currentIndex; //current index of the occurrenceLong
@@ -109,9 +109,9 @@ void OccLongList::explore(const vector<bool>& isFrequent,
 
 	//step 1.2, construct the base for occurrenceMatch
 	//look at the "left","below", and "right" of all other nodes (not below the rightmost node)
-	for ( short i = 1; i < tempV; i++ ) {
+	for ( int i = 1; i < tempV; i++ ) {
 		myLocation = occurrenceLong[currentIndex].second[i];
-		short j;
+		int j;
 
 		//record left occurrences
 		if ( currentPatternTree.previousSibling[i] == -1 ) //I have no left sibling
@@ -155,7 +155,7 @@ void OccLongList::explore(const vector<bool>& isFrequent,
 		myTid = occurrenceLong[currentIndex].first;
 		pos2 = occurrenceMatch.begin();
 		while ( pos2 != occurrenceMatch.end() ) {
-			short j;
+			int j;
 
 			if ( pos2->first == 0 ) { //root occurrence
 				myLocation = occurrenceLong[currentIndex].second[pos2->first];
@@ -239,7 +239,7 @@ void OccLongList::explore(const vector<bool>& isFrequent,
 	//step 2, do transaction match checking
 	bool isClosed = true; //innocent until proven guilty
 	bool isMaximal = true;
-	set<pair<short, short> > transactionMatch;
+	set<pair<int, int> > transactionMatch;
 
 	currentIndex = 0;
 	int startIndex = 0; //the lower bound of a range
@@ -261,9 +261,9 @@ void OccLongList::explore(const vector<bool>& isFrequent,
 
 		//step 2.2, construct the base for transactionMatch
 		//look at the "left", "below", and "right" of all other nodes (not below the rightmost node)
-		for ( short i = 1; i < tempV; i++ ) {
+		for ( int i = 1; i < tempV; i++ ) {
 			myLocation = occurrenceLong[currentIndex].second[i];
-			short j;
+			int j;
 
 			//record left occurrences
 			if ( currentPatternTree.previousSibling[i] == -1 ) //I have no left sibling
@@ -314,7 +314,7 @@ void OccLongList::explore(const vector<bool>& isFrequent,
 
 		pos2 = transactionMatch.begin();
 		while ( pos2 != transactionMatch.end() ) {
-			short j;
+			int j;
 
 			if ( pos2->first == 0 ) { //root occurrence
 				bool isFound = false;
@@ -417,12 +417,12 @@ void OccLongList::explore(const vector<bool>& isFrequent,
 	bool isRightOccurrenceMatch = false;
 
 	//step 3.1, explore the children of the rightmost node 
-	map<short,OccList> potentialChildren;
-	map<short,OccList>::iterator pos;
+	map<int,OccList> potentialChildren;
+	map<int,OccList>::iterator pos;
 	for ( int i = 0; i < occurrenceLong.size(); i++ ) {
 		int myTid = occurrenceLong[i].first;
-		short myLocation = occurrenceLong[i].second[tempV-1];
-		short k = database[myTid].firstChild[myLocation];
+		int myLocation = occurrenceLong[i].second[tempV-1];
+		int k = database[myTid].firstChild[myLocation];
 		//here, redundancy must be recorded also.
 		while ( k != -1 ) {
 			if ( isFrequent[database[myTid].vLabel[k] - MIN_VERTEX] == true ) {
@@ -450,13 +450,13 @@ void OccLongList::explore(const vector<bool>& isFrequent,
 	}
 
 	//step 3.2, explore the right siblings of all the ancestors of the rightmost node
-	short tempNode = currentPatternTree.vNumber - 1;
+	int tempNode = currentPatternTree.vNumber - 1;
 	while ( tempNode != 0 && !isRightOccurrenceMatch ) {
 		potentialChildren.clear();
 		for ( int i = 0; i < occurrenceLong.size(); i++ ) {
 			int myTid = occurrenceLong[i].first;
-			short myLocation = occurrenceLong[i].second[tempNode];
-			short k = database[myTid].nextSibling[myLocation];
+			int myLocation = occurrenceLong[i].second[tempNode];
+			int k = database[myTid].nextSibling[myLocation];
 			while ( k != -1 ) {
 				if ( isFrequent[database[myTid].vLabel[k] - MIN_VERTEX] == true ) {
 					potentialChildren[database[myTid].vLabel[k] - MIN_VERTEX].insert(myTid,k,i);
@@ -485,11 +485,11 @@ void OccLongList::explore(const vector<bool>& isFrequent,
 	}
 
 	//step 4, the worst case, need to check left blanket to see if maximal
-	map<pair<short,short>, pair<int,int> > potentialBlanket; 
-	//(short,short) = (position,label)
+	map<pair<int,int>, pair<int,int> > potentialBlanket; 
+	//(int,int) = (position,label)
 	//(int, int) = (lastTid,count)
 
-	map<pair<short,short>, pair<int,int> >::iterator pos3;
+	map<pair<int,int>, pair<int,int> >::iterator pos3;
 
 	currentIndex = 0;
 	while ( isMaximal && currentIndex < occurrenceLong.size() ) {
@@ -512,9 +512,9 @@ void OccLongList::explore(const vector<bool>& isFrequent,
 		}
 
 		//step 4.2, look at the "left", "below", and "right" of all other nodes (not below the rightmost node)
-		for ( short i = 1; i < tempV && isMaximal; i++ ) {
+		for ( int i = 1; i < tempV && isMaximal; i++ ) {
 			myLocation = occurrenceLong[currentIndex].second[i];
-			short j;
+			int j;
 
 			//record left occurrences
 			if ( currentPatternTree.previousSibling[i] == -1 ) //I have no left sibling

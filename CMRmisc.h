@@ -25,9 +25,9 @@ Header: CMRmisc.h
 
 using namespace std;
 
-extern short MIN_VERTEX;
-extern short MAX_VERTEX;
+extern int MIN_VERTEX;
+extern int MAX_VERTEX;
 
-extern short currentVertexNumber;
+extern int currentVertexNumber;
 
 #endif //CMRmisc_H

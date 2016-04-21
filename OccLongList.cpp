@@ -590,6 +590,6 @@ void OccLongList::explore(const vector<bool>& isFrequent,
 	}
 	if ( isMaximal ) {
 		maximal[tempV]++;
-		//cout << "maximal " << tempV << ":" << currentPatternTree << " support=" << mySupport << endl;
+		cout << "maximal " << tempV << ":" << currentPatternTree << " support=" << mySupport << endl;
 	}
 }

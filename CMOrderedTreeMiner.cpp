@@ -71,6 +71,7 @@ int main(int argc, char* argv[])
 		}
 	}
 	inFile.close();
+	cerr << "Finished loading "<<database.size()<<" trees"<<endl;
 
 	/******************************************************************
 	step2.1: scan the database once, find frequent node labels
